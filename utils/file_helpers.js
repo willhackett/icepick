@@ -11,7 +11,7 @@ const cleanupFiles = (req, res, next) => {
 
   removeFile(req.file.path)
   Object.keys(req.processed).forEach(key => {
-    const path = config.TEMP_UPLOAD_FOLDER + req.processed[key]
+    const path = config.TEMP_UPLOAD_FOLDER + req.processed[key].filename
     if(path !== req.file.path){
       removeFile(path)
     }

@@ -21,8 +21,12 @@ const processSquare = (req, res, next) => {
 
   Promise.all([square, thumb]).then(() => {
     req.processed = {
-      square: squareFile,
-      thumb: thumbFile
+      square: {
+        filename: squareFile
+      },
+      thumb: {
+        filename: thumbFile
+      }
     }
     next()
   }).catch(err => next(err))
@@ -37,7 +41,9 @@ const processBackground = (req, res, next) => {
     .setFormat('jpg')
     .resize(config.BACKGROUND_DIM_X, config.BACKGROUND_DIM_Y)).then(() => {
       req.processed = {
-        background: backgroundFile
+        background: {
+          filename: backgroundFile
+        }
       }
       next()
     }).catch(err => next(err))

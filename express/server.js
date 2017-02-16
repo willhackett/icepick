@@ -16,8 +16,8 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-// TODO: enforce credentials
-app.use(jwt({ secret: config.AUTH_JWT_SECRET, credentialsRequired: false }))
+// enforce credentials for all uploads so we have a referencing subject
+app.use(jwt({ secret: config.AUTH_JWT_SECRET }))
 
 // multer file upload setup
 const upload = multer({
@@ -36,5 +36,5 @@ app.post('/upload/file', upload.single('file'), processFile,
   uploadS3, returnToken, cleanupFiles)
 
 app.listen(config.PORT, function () {
-  console.log(`Example app listening on port ${config.PORT}`)
+  console.log(`Icepick file server listening on port ${config.PORT}`)
 })

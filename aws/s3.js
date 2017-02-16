@@ -24,17 +24,26 @@ const uploadFile = options => new Promise((resolve, reject) => {
 /**
  * Middleware filename generator and uploader for S3
  */
-const uploadS3 = ({ processed, user }, res, next) => {
+const uploadS3 = (req, res, next) => {
+  const { processed, user } = req
 
-  // TODO: remove this for use with proper jwt
-  const sub = '555555'
+  req.uploaded = {}
 
   const uploads = []
   Object.keys(processed).forEach(key => {
-    const fileStream = fs.readFileSync(config.TEMP_UPLOAD_FOLDER + processed[key])
+    const item = processed[key]
+    const fileStream = fs.readFileSync(config.TEMP_UPLOAD_FOLDER + item.filename)
+    const target = item.targetfilename || item.filename
     uploads.push(uploadFile({
-      Key: `${sub}/${processed[key]}`,
+      Key: `${user.sub}/${target}`,
       Body: fileStream
+    }).then(({ Bucket, Key, Location }) => {
+      // set the uploaded details for payload creation
+      req.uploaded[key] = {
+        bucket: Bucket,
+        filename: Key,
+        location: Location
+      }
     }))
   })
 
