@@ -1,3 +1,4 @@
+import fs from 'fs'
 import gm from 'gm'
 import { config } from '/config/environment'
 
