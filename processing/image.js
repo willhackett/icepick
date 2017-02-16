@@ -1,53 +1,46 @@
 import gm from 'gm'
 import { config } from '/config/environment'
 
-const pgm = path => {
-  const _gm = gm(path)
-  const oldWrite = _gm.write
-  _gm.write = outputPath => new Promise((resolve, reject) => {
-    oldWrite(outputPath, (err, result) => err ? reject(err) : resolve(result))
-  })
-  return _gm
-}
+// wrap gm callback in promise
+const write = (path, gm) => new Promise((resolve, reject) => {
+  gm.write(path, (err, result) => err ? reject(err) : resolve(result))
+})
 
-const imageResize = (input, output, x, y = x) => pgm(input)
-  .setFormat('jpg')
-  .resizeExact(x, y)
-  .write(output)
-  .then(result => ({
-    x,
-    y,
-    path: output,
-  }))
-
+// process a square image into a square and thumb processed image
 const processSquare = (req, res, next) => {
-  const { file } = req
-  const processPath = config.TEMP_PROCESSED_FOLDER + file.filename
+  const { file } = req,
+    squareFile = `${file.filename}_square.jpg`,
+    thumbFile = `${file.filename}_thumb.jpg`
 
-  req.processed = {}
-
-  const square = imageResize(file.path, `${processPath}square.jpg`, config.SQUARE_DIM)
-    .then(item => {
-      console.log('square')
-      console.log(item)
-      req.processed.square = item
-    })
-  const thumb = imageResize(file.path, `${processPath}thumb.jpg`, config.THUMB_DIM)
-    .then(item => {
-      console.log('thumb')
-      console.log(item)
-      req.processed.thumb = item
-    })
+  const square = write(config.TEMP_UPLOAD_FOLDER + squareFile, gm(file.path)
+    .setFormat('jpg')
+    .resizeExact(config.SQUARE_DIM, config.SQUARE_DIM))
+  const thumb = write(config.TEMP_UPLOAD_FOLDER + thumbFile, gm(file.path)
+    .setFormat('jpg')
+    .resizeExact(config.THUMB_DIM, config.THUMB_DIM))
 
   Promise.all([square, thumb]).then(() => {
-    res.status(200).json(req.file)
-  })
-
-  //return next()
+    req.processed = {
+      square: squareFile,
+      thumb: thumbFile
+    }
+    next()
+  }).catch(err => next(err))
 }
 
+// process a background image
 const processBackground = (req, res, next) => {
-  return next()
+  const { file } = req,
+    backgroundFile = `${file.filename}_background.jpg`
+
+  write(config.TEMP_UPLOAD_FOLDER + backgroundFile, gm(file.path)
+    .setFormat('jpg')
+    .resize(config.BACKGROUND_DIM_X, config.BACKGROUND_DIM_Y)).then(() => {
+      req.processed = {
+        background: backgroundFile
+      }
+      next()
+    }).catch(err => next(err))
 }
 
 export {
