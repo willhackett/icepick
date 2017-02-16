@@ -1,12 +1,14 @@
 import aws from '/config/aws'
+import fs from 'fs'
 import { config } from '/config/environment'
+
 const s3 = new aws.S3()
 
 // default options
 const defaultOptions = {
   ACL: 'public-read',
   ContentType: 'image/jpeg',
-  bucket: config.S3_BUCKET
+  Bucket: config.S3_BUCKET
 }
 
 /**
@@ -29,14 +31,14 @@ const uploadS3 = ({ processed, user }, res, next) => {
 
   const uploads = []
   Object.keys(processed).forEach(key => {
-    const fileStream = fs.readFileSync(processed[key])
+    const fileStream = fs.readFileSync(config.TEMP_UPLOAD_FOLDER + processed[key])
     uploads.push(uploadFile({
       Key: `${sub}/${processed[key]}`,
       Body: fileStream
     }))
   })
 
-  Promise.all(uploads).then(() => next())
+  Promise.all(uploads).then(() => next()).catch(err => next(err))
 }
 
 export {
