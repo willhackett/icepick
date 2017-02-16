@@ -38,3 +38,7 @@ jspm_packages
 
 # mac nonsense
 .DS_Store
+
+# stop from accidentally commiting test uploads
+temp_uploads
+temp_processed

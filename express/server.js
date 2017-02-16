@@ -2,6 +2,7 @@ import express from 'express'
 import multer from 'multer'
 import bodyParser from 'body-parser'
 import jwt from 'express-jwt'
+import cors from 'cors'
 import { config } from '/config/environment'
 import { processSquare, processBackground } from '/processing/image'
 import { processFile } from '/processing/file'
@@ -12,13 +13,15 @@ import { cleanupFiles } from '/utils/file_helpers'
 const app = express()
 
 // middlewares
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(jwt({ secret: config.AUTH_JWT_SECRET }))
+// TODO: enforce credentials
+app.use(jwt({ secret: config.AUTH_JWT_SECRET, credentialsRequired: false }))
 
 // multer file upload setup
 const upload = multer({
-  dest: 'temp_uploads/',
+  dest: config.TEMP_UPLOAD_FOLDER,
   limits: { fileSize: config.MAX_FILE_SIZE_BYTES }
 })
 
