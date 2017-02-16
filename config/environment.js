@@ -1,5 +1,3 @@
-
-
 const env = process.env
 
 const config = {
@@ -13,7 +11,8 @@ const config = {
   S3_ACCESS_KEY_ID: env.ICEPICK_S3_ACCESS_KEY_ID,
   S3_ACCESS_KEY: env.ICEPICK_S3_ACCESS_KEY,
   S3_REGION: env.ICEPICK_S3_REGION,
-  S3_BUCKET: env.ICEPICK_S3_BUCKET
+  S3_BUCKET: env.ICEPICK_S3_BUCKET,
+  MAX_FILE_SIZE_BYTES: env.ICEPICK_MAX_FILE_SIZE_BYTES || (5 * 1024)
 }
 
 export {
