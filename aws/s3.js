@@ -12,9 +12,9 @@ const defaultOptions = {
 /**
  * Upload a local file to s3
  */
-const upload = options => new Promise((resolve, reject) => {
+const uploadFile = options => new Promise((resolve, reject) => {
   s3.upload({
-    ...defaultOptions
+    ...defaultOptions,
     ...options
   }, (err, data) => err ? reject(err) : resolve(data))
 })
@@ -22,11 +22,10 @@ const upload = options => new Promise((resolve, reject) => {
 /**
  * Middleware filename generator and uploader for S3
  */
-const uploadFilesS3 = (req, res) => {
-  
+const uploadS3 = (req, res, next) => {
+  return next()
 }
 
 export {
-  upload,
-  uploadFilesS3
+  uploadS3
 }
