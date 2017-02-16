@@ -1,0 +1,29 @@
+{
+  "name": "icepick",
+  "version": "0.0.1",
+  "description": "File upload and manipulation service for Openclub",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenClubDev/icepick.git"
+  },
+  "keywords": [
+    "openclub",
+    "image",
+    "uploading"
+  ],
+  "author": "Openclub",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/OpenClubDev/icepick/issues"
+  },
+  "homepage": "https://github.com/OpenClubDev/icepick#readme",
+  "dependencies": {
+    "express": "^4.14.1",
+    "jsonwebtoken": "^7.3.0",
+    "multer": "^1.3.0"
+  }
+}
