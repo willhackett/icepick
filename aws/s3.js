@@ -1,7 +1,9 @@
 import aws from '/config/aws'
 import fs from 'fs'
+import debugCreate from 'debug'
 import { config } from '/config/environment'
 
+const debug = debugCreate('icepick:s3')
 const s3 = new aws.S3()
 
 // default options
@@ -34,6 +36,7 @@ const uploadS3 = (req, res, next) => {
     const item = processed[key]
     const fileStream = fs.readFileSync(config.TEMP_UPLOAD_FOLDER + item.filename)
     const target = item.targetfilename || item.filename
+    debug(`uploading file: ${item.filename} to ${target}`)
     uploads.push(uploadFile({
       Key: `${user.sub}/${target}`,
       Body: fileStream
@@ -44,6 +47,7 @@ const uploadS3 = (req, res, next) => {
         filename: Key,
         location: Location
       }
+      debug(`file uploading to: ${Location}`)
     }))
   })
 
