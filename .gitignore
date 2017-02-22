@@ -41,3 +41,6 @@ jspm_packages
 
 # stop from accidentally commiting test uploads
 temp_uploads
+
+# build files
+build
