@@ -4,7 +4,9 @@
   "description": "File upload and manipulation service for Openclub",
   "main": "/express/server.build.js",
   "scripts": {
-    "local": "./node_modules/.bin/babel-node ./express/server.js",
+    "local": "babel-node ./express/server.js",
+    "build": "webpack --colors --progress --config ./config/webpack.config.babel.js",
+    "start": "node ./build/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -35,8 +37,11 @@
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",
+    "babel-loader": "^6.3.2",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-latest": "^6.22.0",
-    "babel-root-slash-import": "^1.1.0"
+    "babel-root-slash-import": "^1.1.0",
+    "webpack": "^2.2.1",
+    "webpack-node-externals": "^1.5.4"
   }
 }

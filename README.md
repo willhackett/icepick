@@ -1,7 +1,11 @@
 # icepick
 ![Icepick](https://openclubdev.github.io/openclub-assets/images/logo/icepick-logo.png)
 
-File upload and manipulation service for OpenClub
+File upload and manipulation service for OpenClub.
+
+## Details
+
+This server works by requiring an access token matching a user token from the backend server. It then modifies images/files and stores them in an S3 bucket organised by user folders. The client is then returned a file token that can be given to the backend to verify that the associated url with the file is authorised.
 
 ## Environment Variables
 
