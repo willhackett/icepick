@@ -14,9 +14,11 @@ const processSquare = (req, res, next) => {
 
   const square = write(config.TEMP_UPLOAD_FOLDER + squareFile, gm(file.path)
     .setFormat('jpg')
+    .noProfile()
     .resizeExact(config.SQUARE_DIM, config.SQUARE_DIM))
   const thumb = write(config.TEMP_UPLOAD_FOLDER + thumbFile, gm(file.path)
     .setFormat('jpg')
+    .noProfile()
     .resizeExact(config.THUMB_DIM, config.THUMB_DIM))
 
   Promise.all([square, thumb]).then(() => {
@@ -39,7 +41,8 @@ const processBackground = (req, res, next) => {
 
   write(config.TEMP_UPLOAD_FOLDER + backgroundFile, gm(file.path)
     .setFormat('jpg')
-    .resize(config.BACKGROUND_DIM_X, config.BACKGROUND_DIM_Y)).then(() => {
+    .noProfile()
+    .resizeExact(config.BACKGROUND_DIM_X, config.BACKGROUND_DIM_Y)).then(() => {
       req.processed = {
         background: {
           filename: backgroundFile
